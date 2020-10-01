@@ -17,4 +17,6 @@
 
     <exclude-pattern>*/src/Kernel.php</exclude-pattern>
     <exclude-pattern>*/public/index.php</exclude-pattern>
+    <exclude-pattern>*/features/bootstrap/</exclude-pattern>
+    <exclude-pattern>*/tests/bootstrap.php</exclude-pattern>
 </ruleset>
