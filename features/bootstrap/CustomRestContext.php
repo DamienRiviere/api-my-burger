@@ -7,7 +7,7 @@ class CustomRestContext extends RestContext
 {
 
 	/**
-	 * @When /^After authentication on url "([^"]*)" with method "([^"]*)" as user "([^"]*)" with password "([^"]*)", I send a "([^"]*)" request to "([^"]*)" with body:$/
+	 * @When /^After authentication on url "([^"]*)" with method "([^"]*)" as email "([^"]*)" with password "([^"]*)", I send a "([^"]*)" request to "([^"]*)" with body:$/
 	 * @param $arg1
 	 * @param $arg2
 	 * @param $arg3
@@ -33,7 +33,7 @@ class CustomRestContext extends RestContext
 			[],
 			json_encode(
 				[
-					'username' => $arg3,
+					'email' => $arg3,
 					'password' => (string) $arg4,
 				]
 			),
@@ -55,7 +55,7 @@ class CustomRestContext extends RestContext
 	}
 
 	/**
-	 * @When /^authentication on url "([^"]*)" with method "([^"]*)" as user "([^"]*)" with password "([^"]*)"$/
+	 * @When /^authentication on url "([^"]*)" with method "([^"]*)" as email "([^"]*)" with password "([^"]*)"$/
 	 * @param $arg1
 	 * @param $arg2
 	 * @param $arg3
@@ -75,7 +75,7 @@ class CustomRestContext extends RestContext
 			[],
 			json_encode(
 				[
-					'username' => $arg3,
+					'email' => $arg3,
 					'password' => (string) $arg4,
 				]
 			),

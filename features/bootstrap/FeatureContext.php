@@ -12,18 +12,4 @@ use Symfony\Component\HttpKernel\KernelInterface;
  */
 class FeatureContext extends MinkContext
 {
-    /**
-     * @var KernelInterface
-     */
-    private $kernel;
-
-    /**
-     * @var Response|null
-     */
-    private $response;
-
-    public function __construct(KernelInterface $kernel)
-    {
-        $this->kernel = $kernel;
-    }
 }
