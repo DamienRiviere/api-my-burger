@@ -7,6 +7,7 @@ default:
                         doctrine: '@doctrine'
                         kernel: '@kernel'
                         encoder: '@security.user_password_encoder.generic'
+                        em: '@doctrine.orm.entity_manager'
                 - CustomRestContext
                 - behatch:context:json
                 - behatch:context:browser

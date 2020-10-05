@@ -3,9 +3,9 @@
 use App\Entity\User;
 use Behat\Behat\Context\Context;
 use Doctrine\Bundle\DoctrineBundle\Registry;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\ToolsException;
-use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -23,20 +23,26 @@ class DoctrineContext implements Context
 	/** @var UserPasswordEncoderInterface */
 	protected $encoder;
 
+	/** @var EntityManagerInterface */
+	protected $em;
+
 	/**
 	 * DoctrineContext constructor.
 	 *
 	 * @param Registry $doctrine
 	 * @param KernelInterface $kernel
 	 * @param UserPasswordEncoderInterface $encoder
+	 * @param EntityManagerInterface $em
 	 */
 	public function __construct(
 		Registry $doctrine,
 		KernelInterface $kernel,
-		UserPasswordEncoderInterface $encoder
+		UserPasswordEncoderInterface $encoder,
+		EntityManagerInterface $em
 	) {
 		$this->doctrine = $doctrine;
-		$this->schemaTool = new SchemaTool($this->doctrine->getManager());
+		$this->em = $em;
+		$this->schemaTool = new SchemaTool($this->em);
 		$this->kernel = $kernel;
 		$this->encoder = $encoder;
 	}
@@ -53,21 +59,13 @@ class DoctrineContext implements Context
 	}
 
 	/**
-	 * @return ObjectManager
-	 */
-	public function getManager(): ObjectManager
-	{
-		return $this->doctrine->getManager();
-	}
-
-	/**
 	 * @Given I load my user
 	 */
 	public function iLoadMyUser(): void
 	{
 		$user = $this->createUser();
-		$this->getManager()->persist($user);
-		$this->getManager()->flush();
+		$this->em->persist($user);
+		$this->em->flush();
 	}
 
 	/**
