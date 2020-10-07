@@ -28,7 +28,6 @@ final class UuidEncoder
     }
 
     /**
-     * @SuppressWarnings(PHPMD.StaticAccess)
      * @param string $encoded
      * @return UuidInterface|null
      */
