@@ -74,7 +74,7 @@ Feature: Create a new user
     And the JSON should be equal to:
       """
       {
-        "password": "Veuillez remplir le champ du mot de passe !"
+        "password": "Veuillez remplir le champ de mot de passe !"
       }
       """
 
@@ -129,7 +129,7 @@ Feature: Create a new user
       """
       {
         "email": "Veuillez remplir le champ de l'adresse email !",
-        "password": "Veuillez remplir le champ du mot de passe !",
+        "password": "Veuillez remplir le champ de mot de passe !",
         "firstName": "Veuillez remplir le champ du prénom !",
         "lastName": "Veuillez remplir le champ du nom !"
       }

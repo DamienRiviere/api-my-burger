@@ -2,13 +2,17 @@
 
 namespace App\Entity;
 
+use App\Domain\User\UserDTO;
 use App\Repository\UserRepository;
+use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @ORM\HasLifecycleCallbacks()
  */
 class User implements UserInterface
 {
@@ -55,6 +59,67 @@ class User implements UserInterface
      * @var string
      */
     private $slug;
+
+    /**
+     * User constructor.
+     * @param string $email
+     * @param string $firstName
+     * @param string $lastName
+     */
+    public function __construct(
+        string $email,
+        string $firstName,
+        string $lastName
+    ) {
+        $this->email = $email;
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
+    }
+
+    /**
+     * Initialize date when user is created
+     * @ORM\PrePersist
+     */
+    public function initializeCreatedAt(): void
+    {
+        if (empty($this->createdAt)) {
+            $this->createdAt = new DateTime();
+        }
+    }
+
+    /**
+     * Initialize uuid when user is created
+     * @ORM\PrePersist
+     */
+    public function initializeUuid(): void
+    {
+        if (empty($this->uuid)) {
+            $this->uuid = Uuid::uuid4();
+        }
+    }
+
+    /**
+     * Initialize slug when user is created
+     * @ORM\PrePersist
+     */
+    public function initializeSlug(): void
+    {
+        if (empty($this->slug)) {
+            $slug = strtolower($this->firstName . "-" . $this->lastName);
+            $this->slug = $slug;
+        }
+    }
+
+    /**
+     * Initializer roles when user is created
+     * @ORM\PrePersist
+     */
+    public function initializerRoles(): void
+    {
+        if (empty($this->roles)) {
+            $this->roles = ['ROLE_USER'];
+        }
+    }
 
     /**
      * @return string|null

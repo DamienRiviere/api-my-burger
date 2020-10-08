@@ -63,26 +63,9 @@ class DoctrineContext implements Context
 	 */
 	public function iLoadMyUser(): void
 	{
-		$user = $this->createUser();
+		$user = new User("marc@gmail.com", "Marc", "Dupont");
+		$user->setPassword($this->encoder->encodePassword($user, "password"));
 		$this->em->persist($user);
 		$this->em->flush();
-	}
-
-	/**
-	 * @return User
-	 */
-	public function createUser(): User
-	{
-		$user = new User();
-		$user->setFirstName("Damien")
-			->setLastName("Riviere")
-			->setSlug("damien-riviere")
-			->setCreatedAt(new DateTime())
-			->setRoles(["ROLE_ADMIN"])
-			->setPassword($this->encoder->encodePassword($user, "password"))
-			->setEmail("damien@gmail.com")
-		;
-
-		return $user;
 	}
 }

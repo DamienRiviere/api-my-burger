@@ -25,7 +25,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function onException(ExceptionEvent $event, JsonResponder $responder): void
+    public function onException(ExceptionEvent $event): void
     {
         $statusCode = 500;
         $message = [
@@ -39,6 +39,8 @@ class ExceptionSubscriber implements EventSubscriberInterface
                 break;
         }
 
-        $event->setResponse($responder($message, $statusCode));
+        $response = new JsonResponder();
+
+        $event->setResponse($response($message, $statusCode));
     }
 }
