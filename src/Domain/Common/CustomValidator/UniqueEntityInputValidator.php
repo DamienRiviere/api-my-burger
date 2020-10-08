@@ -45,7 +45,7 @@ class UniqueEntityInputValidator extends ConstraintValidator
         foreach ($fields as $name) {
             $fieldValue = $value->{'get' . ucfirst($name)}();
 
-			/** @phpstan-ignore-next-line */
+            /** @phpstan-ignore-next-line */
             $object = $this->em->getRepository($constraint->class)
                 ->findOneBy(
                     [
