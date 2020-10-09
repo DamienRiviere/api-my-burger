@@ -2,23 +2,21 @@
 
 namespace App\Entity;
 
+use App\Domain\User\UserDTO;
 use App\Repository\UserRepository;
+use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @ORM\HasLifecycleCallbacks()
  */
 class User implements UserInterface
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     * @var integer
-     */
-    private $id;
+    use EntityIdTrait;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
@@ -39,13 +37,13 @@ class User implements UserInterface
     private $password;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @var string
      */
     private $firstName;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @var string
      */
     private $lastName;
@@ -62,16 +60,79 @@ class User implements UserInterface
      */
     private $slug;
 
-    public function getId(): ?int
-    {
-        return $this->id;
+    /**
+     * User constructor.
+     * @param string $email
+     * @param string $firstName
+     * @param string $lastName
+     */
+    public function __construct(
+        string $email,
+        string $firstName,
+        string $lastName
+    ) {
+        $this->email = $email;
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
     }
 
+    /**
+     * Initialize date when user is created
+     * @ORM\PrePersist
+     */
+    public function initializeCreatedAt(): void
+    {
+        if (empty($this->createdAt)) {
+            $this->createdAt = new DateTime();
+        }
+    }
+
+    /**
+     * Initialize uuid when user is created
+     * @ORM\PrePersist
+     */
+    public function initializeUuid(): void
+    {
+        if (empty($this->uuid)) {
+            $this->uuid = Uuid::uuid4();
+        }
+    }
+
+    /**
+     * Initialize slug when user is created
+     * @ORM\PrePersist
+     */
+    public function initializeSlug(): void
+    {
+        if (empty($this->slug)) {
+            $slug = strtolower($this->firstName . "-" . $this->lastName);
+            $this->slug = $slug;
+        }
+    }
+
+    /**
+     * Initializer roles when user is created
+     * @ORM\PrePersist
+     */
+    public function initializerRoles(): void
+    {
+        if (empty($this->roles)) {
+            $this->roles = ['ROLE_USER'];
+        }
+    }
+
+    /**
+     * @return string|null
+     */
     public function getEmail(): ?string
     {
         return $this->email;
     }
 
+    /**
+     * @param string $email
+     * @return $this
+     */
     public function setEmail(string $email): self
     {
         $this->email = $email;
@@ -101,6 +162,10 @@ class User implements UserInterface
         return array_unique($roles);
     }
 
+    /**
+     * @param array $roles
+     * @return $this
+     */
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
@@ -116,6 +181,10 @@ class User implements UserInterface
         return (string) $this->password;
     }
 
+    /**
+     * @param string $password
+     * @return $this
+     */
     public function setPassword(string $password): self
     {
         $this->password = $password;
@@ -138,11 +207,18 @@ class User implements UserInterface
     {
     }
 
+    /**
+     * @return string|null
+     */
     public function getFirstName(): ?string
     {
         return $this->firstName;
     }
 
+    /**
+     * @param string $firstName
+     * @return $this
+     */
     public function setFirstName(string $firstName): self
     {
         $this->firstName = $firstName;
@@ -150,11 +226,18 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getLastName(): ?string
     {
         return $this->lastName;
     }
 
+    /**
+     * @param string $lastName
+     * @return $this
+     */
     public function setLastName(string $lastName): self
     {
         $this->lastName = $lastName;
@@ -162,11 +245,18 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * @return DateTimeInterface|null
+     */
     public function getCreatedAt(): ?DateTimeInterface
     {
         return $this->createdAt;
     }
 
+    /**
+     * @param DateTimeInterface $createdAt
+     * @return $this
+     */
     public function setCreatedAt(DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
@@ -174,11 +264,18 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getSlug(): ?string
     {
         return $this->slug;
     }
 
+    /**
+     * @param string $slug
+     * @return $this
+     */
     public function setSlug(string $slug): self
     {
         $this->slug = $slug;
