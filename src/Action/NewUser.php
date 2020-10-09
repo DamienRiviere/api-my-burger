@@ -35,9 +35,6 @@ final class NewUser
     /** @var SerializerInterface */
     protected $serializer;
 
-    /** @var UserRepository */
-    protected $userRepository;
-
     /**
      * NewUser constructor.
      * @param EntityManagerInterface $em
