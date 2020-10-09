@@ -33,4 +33,4 @@ jobs:
       - run: openssl pkey -in config/jwt/private-test.pem -out config/jwt/public-test.pem -pubout -passin pass:$JWT_PASSPHRASE
 
 #      - run: php bin/phpunit
-#      - run: vendor/bin/behat
+      - run: vendor/bin/behat

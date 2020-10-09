@@ -27,7 +27,8 @@ class UniqueEntityInput extends Constraint
      */
     public function __construct($options = null)
     {
-        if (!is_null($options)) {
+        /** @phpstan-ignore-next-line */
+        if (!is_null($options) && !\is_array($options)) {
             $options = [
                 'class' => $options,
             ];
