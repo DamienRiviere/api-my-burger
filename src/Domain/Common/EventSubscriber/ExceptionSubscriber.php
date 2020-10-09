@@ -4,6 +4,7 @@ namespace App\Domain\Common\EventSubscriber;
 
 use App\Domain\Common\Exception\ValidationException;
 use App\Responder\JsonResponder;
+use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -36,6 +37,9 @@ class ExceptionSubscriber implements EventSubscriberInterface
             case ValidationException::class:
                 $statusCode = 400;
                 $message = $event->getThrowable()->getParams();
+                break;
+            case EntityNotFoundException::class:
+                $statusCode = 404;
                 break;
         }
 

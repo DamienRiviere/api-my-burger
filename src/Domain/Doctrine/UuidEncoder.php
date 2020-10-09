@@ -16,7 +16,7 @@ final class UuidEncoder
      * @param UuidInterface $uuid
      * @return string
      */
-    public function encode(UuidInterface $uuid): string
+    public static function encode(UuidInterface $uuid): string
     {
         return gmp_strval(
             gmp_init(
@@ -31,7 +31,7 @@ final class UuidEncoder
      * @param string $encoded
      * @return UuidInterface|null
      */
-    public function decode(string $encoded): ?UuidInterface
+    public static function decode(string $encoded): ?UuidInterface
     {
         try {
             return Uuid::fromString(array_reduce(

@@ -68,4 +68,15 @@ class DoctrineContext implements Context
 		$this->em->persist($user);
 		$this->em->flush();
 	}
+
+	/**
+	 * @Given I load my admin
+	 */
+	public function iLoadMyAdmin(): void
+	{
+		$admin = new User("admin@gmail.com", "Admin", "Admin");
+		$admin->setPassword($this->encoder->encodePassword($admin, "password"));
+		$this->em->persist($admin);
+		$this->em->flush();
+	}
 }

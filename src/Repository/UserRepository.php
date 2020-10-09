@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Domain\Doctrine\UuidEncoder;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityNotFoundException;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -22,10 +24,9 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 {
     use RepositoryUuidFinderTrait;
 
-    public function __construct(ManagerRegistry $registry, UuidEncoder $uuidEncoder)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
-        $this->uuidEncoder = $uuidEncoder;
     }
 
     /**
@@ -44,6 +45,28 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $user->setPassword($newEncodedPassword);
         $this->_em->persist($user);
         $this->_em->flush();
+    }
+
+    /**
+     * @param string $encodedUuid
+     * @return mixed
+     * @throws NonUniqueResultException
+     * @throws EntityNotFoundException
+     */
+    public function findOneByEncodedUuid(string $encodedUuid)
+    {
+        $query = $this->createQueryBuilder('u')
+            ->where('u.uuid = :uuid')
+            ->setParameter('uuid', UuidEncoder::decode($encodedUuid))
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+
+        if ($query instanceof User) {
+            return $query;
+        }
+
+        throw new EntityNotFoundException("Utilisateur introuvable !");
     }
 
     // /**
