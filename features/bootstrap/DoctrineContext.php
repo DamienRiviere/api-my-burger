@@ -65,6 +65,7 @@ class DoctrineContext implements Context
 	{
 		$user = new User("marc@gmail.com", "Marc", "Dupont");
 		$user->setPassword($this->encoder->encodePassword($user, "password"));
+		$user->setRoles(['ROLE_USER']);
 		$this->em->persist($user);
 		$this->em->flush();
 	}
@@ -76,6 +77,7 @@ class DoctrineContext implements Context
 	{
 		$admin = new User("admin@gmail.com", "Admin", "Admin");
 		$admin->setPassword($this->encoder->encodePassword($admin, "password"));
+		$admin->setRoles(['ROLE_ADMIN']);
 		$this->em->persist($admin);
 		$this->em->flush();
 	}

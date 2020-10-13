@@ -5,10 +5,12 @@ namespace App\Repository;
 use App\Domain\Doctrine\UuidEncoder;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Doctrine\ORM\Query\Parameter;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
@@ -49,15 +51,24 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
     /**
      * @param string $encodedUuid
+     * @param string $slug
      * @return mixed
-     * @throws NonUniqueResultException
      * @throws EntityNotFoundException
+     * @throws NonUniqueResultException
      */
-    public function findOneByEncodedUuid(string $encodedUuid)
+    public function findOneByEncodedUuid(string $encodedUuid, string $slug)
     {
         $query = $this->createQueryBuilder('u')
             ->where('u.uuid = :uuid')
-            ->setParameter('uuid', UuidEncoder::decode($encodedUuid))
+            ->andWhere('u.slug = :slug')
+            ->setParameters(
+                new ArrayCollection(
+                    [
+                        new Parameter('uuid', UuidEncoder::decode($encodedUuid)),
+                        new Parameter('slug', $slug)
+                    ]
+                )
+            )
             ->getQuery()
             ->getOneOrNullResult()
         ;
@@ -68,33 +79,4 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         throw new EntityNotFoundException("Utilisateur introuvable !");
     }
-
-    // /**
-    //  * @return User[] Returns an array of User objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('u.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?User
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

@@ -2,6 +2,7 @@
 
 namespace App\Domain\Common\EventSubscriber;
 
+use App\Domain\Common\Exception\AuthorizationException;
 use App\Domain\Common\Exception\ValidationException;
 use App\Responder\JsonResponder;
 use Doctrine\ORM\EntityNotFoundException;
@@ -40,6 +41,9 @@ class ExceptionSubscriber implements EventSubscriberInterface
                 break;
             case EntityNotFoundException::class:
                 $statusCode = 404;
+                break;
+            case AuthorizationException::class:
+                $statusCode = 403;
                 break;
         }
 
