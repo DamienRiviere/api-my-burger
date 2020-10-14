@@ -11,6 +11,7 @@ default:
                 - CustomRestContext
                 - behatch:context:json
                 - behatch:context:browser
+                - rdx\behatvars\BehatVariablesContext
     extensions:
         Behat\Symfony2Extension:
             kernel:
@@ -21,3 +22,4 @@ default:
                 default:
                     symfony2: ~
         Behatch\Extension: ~
+        rdx\behatvars\BehatVariablesExtension: ~

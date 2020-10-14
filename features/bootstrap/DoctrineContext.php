@@ -65,7 +65,34 @@ class DoctrineContext implements Context
 	{
 		$user = new User("marc@gmail.com", "Marc", "Dupont");
 		$user->setPassword($this->encoder->encodePassword($user, "password"));
+		$user->setRoles(['ROLE_USER']);
 		$this->em->persist($user);
 		$this->em->flush();
+	}
+
+	/**
+	 * @Given I load my admin
+	 */
+	public function iLoadMyAdmin(): void
+	{
+		$admin = new User("admin@gmail.com", "Admin", "Admin");
+		$admin->setPassword($this->encoder->encodePassword($admin, "password"));
+		$admin->setRoles(['ROLE_ADMIN']);
+		$this->em->persist($admin);
+		$this->em->flush();
+	}
+
+	/**
+	 * @Given I need parameter :parameter from user :email
+	 * @param string $parameter
+	 * @param string $email
+	 * @return string
+	 */
+	public function getUserParameter(string $parameter, string $email): string
+	{
+		$userRepository = $this->doctrine->getRepository(User::class);
+		$user = $userRepository->findOneBy(['email' => $email]);
+
+		return $user->{'get' . $parameter}();
 	}
 }

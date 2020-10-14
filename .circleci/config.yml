@@ -7,8 +7,8 @@ jobs:
     steps:
       - checkout
 
-      - run: sudo apt update && sudo apt install -y libsqlite3-dev zlib1g-dev openssl
-      - run: sudo docker-php-ext-install zip
+      - run: sudo apt update && sudo apt install -y libsqlite3-dev zlib1g-dev openssl libgmp-dev
+      - run: sudo docker-php-ext-install zip gmp
       - run: sudo composer self-update
 
       - restore_cache: # special step to restore the dependency cache if `composer.lock` does not change
@@ -32,5 +32,4 @@ jobs:
       - run: openssl genpkey -out config/jwt/private-test.pem -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096 -pass pass:$JWT_PASSPHRASE
       - run: openssl pkey -in config/jwt/private-test.pem -out config/jwt/public-test.pem -pubout -passin pass:$JWT_PASSPHRASE
 
-#      - run: php bin/phpunit
       - run: vendor/bin/behat

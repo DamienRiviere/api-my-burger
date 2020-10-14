@@ -30,8 +30,10 @@
         "behat/symfony2-extension": "^2.1",
         "behatch/contexts": "^3.3",
         "doctrine/doctrine-fixtures-bundle": "^3.3",
+        "fzaninotto/faker": "^1.9",
         "phpmd/phpmd": "^2.9",
         "phpstan/phpstan-symfony": "^0.12.8",
+        "rdx/behat-variables": "^1.2",
         "squizlabs/php_codesniffer": "^3.5",
         "symfony/maker-bundle": "^1.21",
         "symfony/phpunit-bridge": "^5.1"

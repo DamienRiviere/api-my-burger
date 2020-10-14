@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Domain\User\UserDTO;
+use App\Domain\Doctrine\UuidEncoder;
 use App\Repository\UserRepository;
 use DateTime;
 use DateTimeInterface;
@@ -59,6 +59,12 @@ class User implements UserInterface
      * @var string
      */
     private $slug;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @var string
+     */
+    private $uuidEncoded;
 
     /**
      * User constructor.
@@ -118,6 +124,17 @@ class User implements UserInterface
     {
         if (empty($this->roles)) {
             $this->roles = ['ROLE_USER'];
+        }
+    }
+
+    /**
+     * Initializer uuidEncoded when user is created
+     * @ORM\PrePersist
+     */
+    public function initializeUuidEncoded(): void
+    {
+        if (empty($this->uuidEncoded)) {
+            $this->uuidEncoded = UuidEncoder::encode($this->uuid);
         }
     }
 
@@ -281,5 +298,13 @@ class User implements UserInterface
         $this->slug = $slug;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUuidEncoded(): string
+    {
+        return $this->uuidEncoded;
     }
 }

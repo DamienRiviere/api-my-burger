@@ -12,18 +12,13 @@ trait RepositoryUuidFinderTrait
 {
 
     /**
-     * @var UuidEncoder
-     */
-    protected $uuidEncoder;
-
-    /**
      * @param string $encodedUuid
      * @return mixed
      */
     public function findOneByEncodedUuid(string $encodedUuid)
     {
         return $this->findOneBy([
-            'uuid' => $this->uuidEncoder->decode($encodedUuid)
+            'uuid' => UuidEncoder::decode($encodedUuid)
         ]);
     }
 }
