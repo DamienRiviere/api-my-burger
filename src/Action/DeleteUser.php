@@ -12,6 +12,7 @@ use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * Class DeleteUser
@@ -33,25 +34,30 @@ final class DeleteUser
     /** @var CheckAuthorization */
     protected $checkAuthorization;
 
+    /** @var Security */
+    protected $security;
+
     /**
      * DeleteUser constructor.
      * @param UserRepository $userRepository
      * @param EntityManagerInterface $em
      * @param AuthorizationCheckerInterface $authorization
      * @param CheckAuthorization $checkAuthorization
+     * @param Security $security
      */
     public function __construct(
         UserRepository $userRepository,
         EntityManagerInterface $em,
         AuthorizationCheckerInterface $authorization,
-        CheckAuthorization $checkAuthorization
+        CheckAuthorization $checkAuthorization,
+        Security $security
     ) {
         $this->userRepository = $userRepository;
         $this->em = $em;
         $this->authorization = $authorization;
         $this->checkAuthorization = $checkAuthorization;
+        $this->security = $security;
     }
-
 
     /**
      * @param string $uuid
@@ -64,10 +70,11 @@ final class DeleteUser
      */
     public function __invoke(string $uuid, string $slug, JsonResponder $responder)
     {
-        $user = $this->userRepository->findOneByEncodedUuid($uuid, $slug);
-        $authorization = $this->authorization->isGranted('delete', $user);
+        $userAuthenticated = $this->security->getUser();
+        $authorization = $this->authorization->isGranted('delete', $userAuthenticated);
         $this->checkAuthorization->check($authorization, 'delete');
-        $this->em->remove($user);
+        $userToDelete = $this->userRepository->findOneByEncodedUuid($uuid, $slug);
+        $this->em->remove($userToDelete);
         $this->em->flush();
 
         return $responder(null, Response::HTTP_NO_CONTENT);

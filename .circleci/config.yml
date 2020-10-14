@@ -7,7 +7,7 @@ jobs:
     steps:
       - checkout
 
-      - run: sudo apt update && sudo apt install -y libsqlite3-dev zlib1g-dev openssl
+      - run: sudo apt update && sudo apt install -y libsqlite3-dev zlib1g-dev openssl php7.4-gmp
       - run: sudo docker-php-ext-install zip
       - run: sudo composer self-update
 
@@ -32,5 +32,4 @@ jobs:
       - run: openssl genpkey -out config/jwt/private-test.pem -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096 -pass pass:$JWT_PASSPHRASE
       - run: openssl pkey -in config/jwt/private-test.pem -out config/jwt/public-test.pem -pubout -passin pass:$JWT_PASSPHRASE
 
-#      - run: php bin/phpunit
       - run: vendor/bin/behat

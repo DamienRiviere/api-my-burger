@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "71680560a0eda097ae61a692d4328e21",
+    "content-hash": "56435d05e3dc9381715566f1a6fb81c2",
     "packages": [
         {
             "name": "brick/math",
@@ -6923,6 +6923,45 @@
             ],
             "description": "Symfony Framework extensions and rules for PHPStan",
             "time": "2020-10-01T11:10:28+00:00"
+        },
+        {
+            "name": "rdx/behat-variables",
+            "version": "1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rudiedirkx/behat-variables.git",
+                "reference": "3729c7aec18cf4a4ce1a0faacc8da3fc0dc9354a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rudiedirkx/behat-variables/zipball/3729c7aec18cf4a4ce1a0faacc8da3fc0dc9354a",
+                "reference": "3729c7aec18cf4a4ce1a0faacc8da3fc0dc9354a",
+                "shasum": ""
+            },
+            "require": {
+                "behat/behat": "^3.0"
+            },
+            "require-dev": {
+                "symfony/process": "^2.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "rdx\\behatvars\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Rudie Dirkx",
+                    "email": "github@hotblocks.nl"
+                }
+            ],
+            "description": "Store variables across Scenarios during Behat testing",
+            "time": "2017-11-16T11:58:21+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",

@@ -81,4 +81,18 @@ class DoctrineContext implements Context
 		$this->em->persist($admin);
 		$this->em->flush();
 	}
+
+	/**
+	 * @Given I need parameter :parameter from user :email
+	 * @param string $parameter
+	 * @param string $email
+	 * @return string
+	 */
+	public function getUserParameter(string $parameter, string $email): string
+	{
+		$userRepository = $this->doctrine->getRepository(User::class);
+		$user = $userRepository->findOneBy(['email' => $email]);
+
+		return $user->{'get' . $parameter}();
+	}
 }

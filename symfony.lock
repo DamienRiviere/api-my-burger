@@ -222,6 +222,9 @@
             "config/packages/ramsey_uuid_doctrine.yaml"
         ]
     },
+    "rdx/behat-variables": {
+        "version": "1.2"
+    },
     "squizlabs/php_codesniffer": {
         "version": "3.0",
         "recipe": {

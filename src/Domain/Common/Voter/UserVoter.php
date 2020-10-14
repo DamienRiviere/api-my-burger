@@ -32,6 +32,10 @@ final class UserVoter extends Voter
             return false;
         }
 
+        if ($user !== $subject) {
+            return false;
+        }
+
         if (!in_array("ROLE_ADMIN", $user->getRoles(), true)) {
             return false;
         }
