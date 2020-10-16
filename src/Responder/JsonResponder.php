@@ -12,12 +12,14 @@ final class JsonResponder
 {
 
     /**
-     * @param ?array $data
+     * @phpstan-ignore-next-line
+     * @param $data
      * @param int $statusCode
      * @param array $headers
      * @return Response
+     * @phpstan-ignore-next-line
      */
-    public function __invoke(?array $data, int $statusCode, array $headers = []): Response
+    public function __invoke($data, int $statusCode, array $headers = []): Response
     {
         if (is_array($data)) {
             $data = json_encode($data);

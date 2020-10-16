@@ -9,6 +9,7 @@ use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -20,6 +21,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Groups({"showUser"})
      * @var string
      */
     private $email;
@@ -38,24 +40,28 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"showUser"})
      * @var string
      */
     private $firstName;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"showUser"})
      * @var string
      */
     private $lastName;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"showUser"})
      * @var DateTimeInterface
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"showUser"})
      * @var string
      */
     private $slug;
