@@ -12,7 +12,6 @@ use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Core\Security;
 
 /**
  * Class DeleteUser
@@ -34,29 +33,23 @@ final class DeleteUser
     /** @var CheckAuthorization */
     protected $checkAuthorization;
 
-    /** @var Security */
-    protected $security;
-
     /**
      * DeleteUser constructor.
      * @param UserRepository $userRepository
      * @param EntityManagerInterface $em
      * @param AuthorizationCheckerInterface $authorization
      * @param CheckAuthorization $checkAuthorization
-     * @param Security $security
      */
     public function __construct(
         UserRepository $userRepository,
         EntityManagerInterface $em,
         AuthorizationCheckerInterface $authorization,
-        CheckAuthorization $checkAuthorization,
-        Security $security
+        CheckAuthorization $checkAuthorization
     ) {
         $this->userRepository = $userRepository;
         $this->em = $em;
         $this->authorization = $authorization;
         $this->checkAuthorization = $checkAuthorization;
-        $this->security = $security;
     }
 
     /**
@@ -70,8 +63,7 @@ final class DeleteUser
      */
     public function __invoke(string $uuid, string $slug, JsonResponder $responder)
     {
-        $userAuthenticated = $this->security->getUser();
-        $authorization = $this->authorization->isGranted('delete', $userAuthenticated);
+        $authorization = $this->authorization->isGranted('deleteUser');
         $this->checkAuthorization->check($authorization, 'delete');
         $userToDelete = $this->userRepository->findOneByEncodedUuid($uuid, $slug);
         $this->em->remove($userToDelete);
