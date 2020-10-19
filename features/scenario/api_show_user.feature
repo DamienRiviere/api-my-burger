@@ -75,5 +75,3 @@
         And the JSON node "_link.delete" should exist
         And the JSON node "_link.delete.href" should exist
         And the JSON node "_link.delete.href" should contain "/api/users/<<MARC_UUID>>/<<MARC_SLUG>>"
-        And the JSON node "_link.delete.method" should exist
-        And the JSON node "_link.delete.method" should contain "DELETE"

@@ -55,7 +55,7 @@ final class ShowUser
         $user = $this->userRepository->findOneByEncodedUuid($uuid, $slug);
         $authorization = $this->authorization->isGranted('showUser', $user);
         $this->checkAuthorization->check($authorization, 'access');
-        $data = $this->serializer->serialize($user, 'json', ['groups' => 'showUser']);
+        $data = $this->serializer->serialize($user, 'json', ['groups' => ['showUser']]);
 
         return $responder($data, Response::HTTP_OK);
     }
