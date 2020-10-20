@@ -22,6 +22,7 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $admin = $this->createAdminUser();
+        $test = $this->createUser();
         $faker = Factory::create('fr-FR');
 
         for ($i = 0; $i < 50; $i++) {
@@ -33,6 +34,7 @@ class AppFixtures extends Fixture
         }
 
         $manager->persist($admin);
+        $manager->persist($test);
         $manager->flush();
     }
 
@@ -43,5 +45,14 @@ class AppFixtures extends Fixture
         $admin->setRoles(["ROLE_ADMIN"]);
 
         return $admin;
+    }
+
+    public function createUser(): User
+    {
+        $user = new User("user@gmail.com", "Utilisateur", "DeTest");
+        $user->setPassword($this->encoder->encodePassword($user, "password"));
+        $user->setRoles(['ROLE_USER']);
+
+        return $user;
     }
 }

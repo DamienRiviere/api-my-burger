@@ -11,10 +11,11 @@ final class UserVoter extends Voter
 
     protected const DELETE_USER = 'deleteUser';
     protected const SHOW_USER = 'showUser';
+    protected const SHOW_USER_LIST = 'showUserList';
 
     protected function supports($attribute, $subject): bool
     {
-        if (!in_array($attribute, [self::DELETE_USER, self::SHOW_USER])) {
+        if (!in_array($attribute, [self::DELETE_USER, self::SHOW_USER, self::SHOW_USER_LIST])) {
              return false;
         }
 
@@ -34,6 +35,8 @@ final class UserVoter extends Voter
                 return $this->canDeleteUser($user);
             case self::SHOW_USER:
                 return $this->canShowUser($user, $subject);
+            case self::SHOW_USER_LIST:
+                return $this->canShowUserList($user);
         }
 
         return true;
@@ -41,23 +44,31 @@ final class UserVoter extends Voter
 
     private function canDeleteUser(User $user): bool
     {
-        if (in_array("ROLE_ADMIN", $user->getRoles(), true)) {
-            return true;
-        }
+        $checkAdmin = $this->checkRoleAdmin($user->getRoles());
 
-        return false;
+        return $checkAdmin ? true : false;
     }
 
     private function canShowUser(User $user, User $subject): bool
     {
-        if (in_array("ROLE_ADMIN", $user->getRoles(), true)) {
-            return true;
-        }
+        $checkAdmin = $this->checkRoleAdmin($user->getRoles());
 
         if ($user === $subject) {
             return true;
         }
 
-        return false;
+        return $checkAdmin ? true : false;
+    }
+
+    private function canShowUserList(User $user): bool
+    {
+        $checkAdmin = $this->checkRoleAdmin($user->getRoles());
+
+        return $checkAdmin ? true : false;
+    }
+
+    private function checkRoleAdmin(array $roles): bool
+    {
+        return in_array("ROLE_ADMIN", $roles, true);
     }
 }

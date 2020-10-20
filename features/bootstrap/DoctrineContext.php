@@ -59,7 +59,7 @@ class DoctrineContext implements Context
 	}
 
 	/**
-	 * @Given I load my user
+	 * @When  I load my user
 	 */
 	public function iLoadMyUser(): void
 	{
@@ -71,7 +71,22 @@ class DoctrineContext implements Context
 	}
 
 	/**
-	 * @Given I load my admin
+	 * @When I load my users
+	 */
+	public function iLoadMyUsers(): void
+	{
+		for ($i = 0; $i < 50; $i++) {
+			$faker = Faker\Factory::create('fr-Fr');
+			$user = new User($faker->email, $faker->firstName, $faker->lastName);
+			$user->setPassword($this->encoder->encodePassword($user, "password"));
+			$user->setRoles(['ROLE_USER']);
+			$this->em->persist($user);
+			$this->em->flush();
+		}
+	}
+
+	/**
+	 * @When I load my admin
 	 */
 	public function iLoadMyAdmin(): void
 	{
@@ -83,7 +98,7 @@ class DoctrineContext implements Context
 	}
 
 	/**
-	 * @Given I need parameter :parameter from user :email
+	 * @When I need parameter :parameter from user :email
 	 * @param string $parameter
 	 * @param string $email
 	 * @return string
