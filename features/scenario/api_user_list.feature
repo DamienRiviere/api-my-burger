@@ -34,10 +34,10 @@
         """
         Then the response status code should be 403
         And the response should be in JSON
-        And the response should be equal to:
+        And the JSON should be equal to:
         """
         {
-            "message": "Vous n'êtes pas autorisé à accéder à cette ressource !"
+          "message": "Vous n'êtes pas autorisé à accéder à cette ressource !"
         }
         """
 
@@ -70,13 +70,13 @@
         And the JSON node "root[0]._link.self.href" should contain "/api/users/<<ADMIN_UUID>>/<<ADMIN_SLUG>>"
         And the JSON node "root[0]._link.delete" should exist
         And the JSON node "root[0]._link.delete.href" should exist
-        And the JSON node "root[0]._link.delete.href" should contain "/api/users/<<ADMIN__UUID>>/<<ADMIN_SLUG>>"
+        And the JSON node "root[0]._link.delete.href" should contain "/api/users/<<ADMIN_UUID>>/<<ADMIN_SLUG>>"
         And the JSON node "root[0]._link.first" should exist
         And the JSON node "root[0]._link.first.href" should exist
         And the JSON node "root[0]._link.first.href" should contain "/api/users?page=1"
         And the JSON node "root[0]._link.last" should exist
         And the JSON node "root[0]._link.last.href" should exist
-        And the JSON node "root[0]._link.last.href" should contain "/api/users?page=3"
+        And the JSON node "root[0]._link.last.href" should contain "/api/users?page=6"
         And the JSON node "root[0]._link.next" should exist
         And the JSON node "root[0]._link.next.href" should exist
         And the JSON node "root[0]._link.next.href" should contain "/api/users?page=2"

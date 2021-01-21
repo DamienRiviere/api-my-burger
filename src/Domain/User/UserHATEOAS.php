@@ -74,7 +74,7 @@ final class UserHATEOAS
     public function getSelfLink(array $data, User $user): array
     {
         $data['_link']['self']['href'] = $this->urlGenerator->generate(
-            User::SHOW_USER_LIST,
+            User::SHOW_USER,
             [
                 'uuid' => $user->getUuidEncoded(),
                 'slug' => $user->getSlug()

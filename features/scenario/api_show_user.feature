@@ -38,11 +38,11 @@
         Then the response status code should be 403
         And the response should be in JSON
         And the JSON should be equal to:
-          """
-          {
-              "message": "Vous n'êtes pas autorisé à accéder à cette ressource !"
-          }
-          """
+        """
+        {
+          "message": "Vous n'êtes pas autorisé à accéder à cette ressource !"
+        }
+        """
 
       Scenario: Test to access profile with his own account
         When After authentication on url "/api/login_check" with method "POST" as email "marc@gmail.com" with password "password", I send a "GET" request to "/api/users/<<MARC_UUID>>/<<MARC_SLUG>>" with body:

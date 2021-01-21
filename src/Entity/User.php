@@ -21,6 +21,7 @@ class User implements UserInterface
 
     public const LIMIT_PER_PAGE = 10;
     public const SHOW_USER_LIST = "api_show_user_list";
+    public const SHOW_USER = "api_show_user";
     public const DELETE_USER = "api_delete_user";
 
     /**
