@@ -11,7 +11,7 @@ use Symfony\Component\Serializer\Exception\LogicException;
 use Symfony\Component\Serializer\Normalizer\ContextAwareNormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
-final class UserNormalizer implements ContextAwareNormalizerInterface
+final class UserListNormalizer implements ContextAwareNormalizerInterface
 {
 
     /** @var ObjectNormalizer */
@@ -42,7 +42,11 @@ final class UserNormalizer implements ContextAwareNormalizerInterface
      */
     public function supportsNormalization($data, $format = null, array $context = []): bool
     {
-        return $data instanceof User && in_array('showUser', $context['groups'], true);
+        return $data
+            instanceof User
+            && in_array('showUser', $context['groups'], true)
+            && array_key_exists('page', $context)
+            && array_key_exists('users', $context);
     }
 
     /**
@@ -56,7 +60,12 @@ final class UserNormalizer implements ContextAwareNormalizerInterface
     public function normalize($object, $format = null, array $context = []): array
     {
         $data = $this->normalizer->normalize($object, $format, $context);
-        $data = $this->hateoas->getDeleteLink($data, $object);
+        $pagination = new Pagination(User::LIMIT_PER_PAGE, $context['users'], $context['page']);
+        $data = $this->hateoas->getRessourcesLink($data, $object);
+        $data = $this->hateoas->getPagesLink(
+            $data,
+            ['pagination' => $pagination, 'page' => $context['page'], 'totalPage' => $context['totalPage']]
+        );
 
         return $data;
     }

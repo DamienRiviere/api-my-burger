@@ -19,6 +19,11 @@ class User implements UserInterface
 {
     use EntityIdTrait;
 
+    public const LIMIT_PER_PAGE = 10;
+    public const SHOW_USER_LIST = "api_show_user_list";
+    public const SHOW_USER = "api_show_user";
+    public const DELETE_USER = "api_delete_user";
+
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      * @Groups({"showUser"})
@@ -68,6 +73,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"showUser"})
      * @var string
      */
     private $uuidEncoded;

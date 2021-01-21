@@ -4,14 +4,14 @@
 
     Background:
       When I load my user
-      Given I need parameter "UuidEncoded" from user "marc@gmail.com"
+      And I need parameter "UuidEncoded" from user "marc@gmail.com"
       And I save it into "MARC_UUID"
-      Given I need parameter "Slug" from user "marc@gmail.com"
+      And I need parameter "Slug" from user "marc@gmail.com"
       And I save it into "MARC_SLUG"
       Then I load my admin
-      Given I need parameter "UuidEncoded" from user "admin@gmail.com"
+      And I need parameter "UuidEncoded" from user "admin@gmail.com"
       And I save it into "ADMIN_UUID"
-      Given I need parameter "Slug" from user "admin@gmail.com"
+      And I need parameter "Slug" from user "admin@gmail.com"
       And I save it into "ADMIN_SLUG"
 
       Scenario: Test with a user who doesn't exist
@@ -29,7 +29,7 @@
         }
         """
 
-      Scenario: Test to access profile with another account
+      Scenario: Test to access to profile with another account
         When After authentication on url "/api/login_check" with method "POST" as email "marc@gmail.com" with password "password", I send a "GET" request to "/api/users/<<ADMIN_UUID>>/<<ADMIN_SLUG>>" with body:
           """
           {
@@ -38,11 +38,11 @@
         Then the response status code should be 403
         And the response should be in JSON
         And the JSON should be equal to:
-          """
-          {
-              "message": "Vous n'êtes pas autorisé à accéder à cette ressource !"
-          }
-          """
+        """
+        {
+          "message": "Vous n'êtes pas autorisé à accéder à cette ressource !"
+        }
+        """
 
       Scenario: Test to access profile with his own account
         When After authentication on url "/api/login_check" with method "POST" as email "marc@gmail.com" with password "password", I send a "GET" request to "/api/users/<<MARC_UUID>>/<<MARC_SLUG>>" with body:
@@ -57,8 +57,9 @@
         And the JSON node "lastName" should exist
         And the JSON node "createdAt" should exist
         And the JSON node "slug" should exist
+        And the JSON node "uuidEncoded" should exist
 
-      Scenario: Test to access user profile with admin account
+      Scenario: Test to access to user profile with admin account
         When After authentication on url "/api/login_check" with method "POST" as email "admin@gmail.com" with password "password", I send a "GET" request to "/api/users/<<MARC_UUID>>/<<MARC_SLUG>>" with body:
         """
         {
