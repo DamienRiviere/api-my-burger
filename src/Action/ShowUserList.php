@@ -2,15 +2,17 @@
 
 namespace App\Action;
 
-use App\Domain\Common\Exception\AuthorizationException;
-use App\Domain\Service\CheckAuthorization;
-use App\Repository\UserRepository;
 use App\Responder\JsonResponder;
+use App\Repository\UserRepository;
+use App\Domain\Helper\PaginationHelper;
+use App\Domain\Service\CheckAuthorization;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Serializer\SerializerInterface;
+use App\Domain\Common\Exception\AuthorizationException;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
  * Class ShowUserList
@@ -52,16 +54,30 @@ final class ShowUserList
     }
 
     /**
+     * @param Request $request
      * @param JsonResponder $responder
      * @return Response
      * @throws AuthorizationException
      */
-    public function __invoke(JsonResponder $responder): Response
+    public function __invoke(Request $request, JsonResponder $responder): Response
     {
         $authorization = $this->authorization->isGranted('showUserList');
         $this->checkAuthorization->check($authorization, 'access');
-        $users = $this->userRepository->findAll();
-        $data = $this->serializer->serialize($users, 'json', ['groups' => ['showUser']]);
+
+        $usersAndTotalPage = $this->userRepository->findUsersAndTotalPage();
+        $page = PaginationHelper::checkPage($request, $usersAndTotalPage['totalPage']);
+        $usersPaginated = $this->userRepository->findUserPaginated($page);
+
+        $data = $this->serializer->serialize(
+            $usersPaginated,
+            'json',
+            [
+                'groups' => ['showUser'],
+                'page' => $page,
+                'users' => $usersAndTotalPage['users'],
+                'totalPage' => $usersAndTotalPage['totalPage']
+            ]
+        );
 
         return $responder($data, Response::HTTP_OK);
     }

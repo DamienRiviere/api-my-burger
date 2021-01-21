@@ -92,10 +92,10 @@
         And the response should be in JSON
         And the JSON node "root[0]._link.prev" should exist
         And the JSON node "root[0]._link.prev.href" should exist
-        And the JSON node "root[0]._link.prev" should contain "/api/users?page=1"
+        And the JSON node "root[0]._link.prev.href" should contain "/api/users?page=1"
 
       Scenario: Test _link.next
-        When After authentication on url "/api/login_check" with method "POST" as email "admin@gmail.com" with password "password", I send a "GET" request to "/api/users?page=3" with body:
+        When After authentication on url "/api/login_check" with method "POST" as email "admin@gmail.com" with password "password", I send a "GET" request to "/api/users?page=6" with body:
         """
         {
         }
